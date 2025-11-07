@@ -1,27 +1,17 @@
 {
-  "version": 2,
   "builds": [
     {
-      "src": "server/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "client/dist/**",
-      "use": "@vercel/static"
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "routes": [
     {
-      "src": "/(users|habit|Goal|habitLog|soulfuel|notifications|analytics)(.*)",
-      "dest": "/server/server.js"
-    },
-    {
-      "src": "/uploads/(.*)",
-      "dest": "/server/uploads/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/client/dist/$1"
+      "dest": "/client/dist/index.html"
     }
   ]
 }
