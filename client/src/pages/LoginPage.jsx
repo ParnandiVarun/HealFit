@@ -27,7 +27,7 @@ export default function LoginPage() {
 
     try {
       const response = await fetch(
-        "https://my-habit-5.onrender.com/users/login",
+        `${import.meta.env.VITE_BACKEND_URL}/users/login`,
         {
           method: "POST",
           headers: {
@@ -70,7 +70,7 @@ export default function LoginPage() {
 
     try {
       const response = await fetch(
-        "https://my-habit-5.onrender.com/users/forgot-password",
+        `${import.meta.env.VITE_BACKEND_URL}/users/forgot-password`,
         {
           method: "POST",
           headers: {

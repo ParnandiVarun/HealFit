@@ -40,11 +40,14 @@ function GoalsPage() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("https://my-habit-5.onrender.com/Goal/getgoal", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/Goal/getgoal`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to fetch goals");
 
@@ -69,7 +72,7 @@ function GoalsPage() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://my-habit-5.onrender.com/Goal/goalcreate",
+        `${import.meta.env.VITE_BACKEND_URL}/Goal/goalcreate`,
         {
           method: "POST",
           headers: {
@@ -105,12 +108,15 @@ function GoalsPage() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`https://my-habit-5.onrender.com/Goal/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/Goal/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await res.json();
 
       if (data.success) {
@@ -130,7 +136,7 @@ function GoalsPage() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://my-habit-5.onrender.com/Goal/${id}/complete`,
+        `${import.meta.env.VITE_BACKEND_URL}/Goal/${id}/complete`,
         {
           method: "PATCH",
           headers: {
@@ -157,14 +163,17 @@ function GoalsPage() {
   const updateProgress = async (id, progress) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`https://my-habit-5.onrender.com/Goal/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ progress }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/Goal/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ progress }),
+        }
+      );
       const data = await res.json();
 
       if (data.success) {

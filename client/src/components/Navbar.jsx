@@ -50,7 +50,7 @@ export default function Navbar() {
 
     try {
       const res = await fetch(
-        `https://my-habit-5.onrender.com/users/${userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${userId}`,
         {
           method: "GET",
           headers: {
@@ -77,7 +77,7 @@ export default function Navbar() {
         if (data.user.profilePicture) {
           imageUrl = data.user.profilePicture;
           if (!imageUrl.startsWith("http")) {
-            imageUrl = `https://my-habit-5.onrender.com/${imageUrl.replace(
+            imageUrl = `${import.meta.env.VITE_BACKEND_URL}/${imageUrl.replace(
               /^\//,
               ""
             )}`;

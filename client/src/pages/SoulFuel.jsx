@@ -68,7 +68,7 @@ const SoulFuel = () => {
 
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "https://my-habit-5.onrender.com/soulfuel/daily",
+        `${import.meta.env.VITE_BACKEND_URL}/soulfuel/daily`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -168,7 +168,7 @@ const SoulFuel = () => {
       const userId = localStorage.getItem("id");
 
       const response = await fetch(
-        `https://my-habit-5.onrender.com/users/${userId}/notifications`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${userId}/notifications`,
         {
           method: "PUT",
           headers: {

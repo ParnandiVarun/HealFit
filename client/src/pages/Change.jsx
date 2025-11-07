@@ -67,7 +67,7 @@ export default function ResetPasswordPage() {
 
     try {
       const response = await fetch(
-        "https://my-habit-5.onrender.com/users/reset-password",
+        `${import.meta.env.VITE_BACKEND_URL}/users/reset-password`,
         {
           method: "POST",
           headers: {

@@ -38,7 +38,7 @@ export default function SignupPage() {
 
     try {
       const response = await fetch(
-        "https://my-habit-5.onrender.com/users/register",
+        `${import.meta.env.VITE_BACKEND_URL}/users/register`,
         {
           method: "POST",
           headers: {

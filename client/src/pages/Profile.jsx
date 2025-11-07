@@ -62,7 +62,7 @@ const Profile = () => {
 
       // Fetch user profile
       const profileResponse = await fetch(
-        `https://my-habit-5.onrender.com/users/${userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@ const Profile = () => {
       let statsData = {};
       try {
         const statsResponse = await fetch(
-          `https://my-habit-5.onrender.com/users/${userId}/stats`,
+          `${import.meta.env.VITE_BACKEND_URL}/users/${userId}/stats`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -149,7 +149,7 @@ const Profile = () => {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `https://my-habit-5.onrender.com/users/${userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${userId}`,
         {
           method: "PUT",
           headers: {
@@ -194,7 +194,7 @@ const Profile = () => {
       console.log("🟢 Uploading profile picture...", file);
 
       const response = await fetch(
-        `https://my-habit-5.onrender.com/users/${userId}/upload`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${userId}/upload`,
         {
           method: "POST",
           headers: {
@@ -324,20 +324,26 @@ const Profile = () => {
 
     // If it starts with uploads/ (without slash), construct the full URL
     if (userData.profilePicture.startsWith("uploads/")) {
-      const fullUrl = `https://my-habit-5.onrender.com/${userData.profilePicture}`;
+      const fullUrl = `${import.meta.env.VITE_BACKEND_URL}/uploads/${
+        userData.profilePicture
+      }`;
       console.log("🟢 Constructed URL from uploads/:", fullUrl);
       return fullUrl;
     }
 
     // If it starts with /uploads, construct the full URL
     if (userData.profilePicture.startsWith("/uploads")) {
-      const fullUrl = `https://my-habit-5.onrender.com${userData.profilePicture}`;
+      const fullUrl = `${import.meta.env.VITE_API_URL}${
+        userData.profilePicture
+      }`;
       console.log("🟢 Constructed URL from /uploads:", fullUrl);
       return fullUrl;
     }
 
     // If it's just a filename, construct the path
-    const fullUrl = `https://my-habit-5.onrender.com/uploads/${userData.profilePicture}`;
+    const fullUrl = `${import.meta.env.VITE_API_URL}/uploads/${
+      userData.profilePicture
+    }`;
     console.log("🟢 Constructed URL from filename:", fullUrl);
     return fullUrl;
   };

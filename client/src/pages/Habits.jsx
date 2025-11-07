@@ -86,7 +86,7 @@ const createHabitAPI = async (habitData) => {
 
   try {
     const response = await fetch(
-      "https://my-habit-5.onrender.com/habit/create",
+      `${import.meta.env.VITE_BACKEND_URL}/habit/create`,
       {
         method: "POST",
         headers: {
@@ -114,12 +114,15 @@ const getHabitsAPI = async () => {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("https://my-habit-5.onrender.com/habit/get", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/habit/get`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     const data = await response.json();
     console.log(data);
@@ -139,7 +142,7 @@ const completeHabitAPI = async (habitId) => {
 
   try {
     const response = await fetch(
-      `https://my-habit-5.onrender.com/habit/${habitId}/complete`,
+      `${import.meta.env.VITE_BACKEND_URL}/habit/${habitId}/complete`,
       {
         method: "PATCH",
         headers: {
@@ -166,7 +169,7 @@ const deleteHabitAPI = async (habitId) => {
 
   try {
     const response = await fetch(
-      `https://my-habit-5.onrender.com/habit/${habitId}`,
+      `${import.meta.env.VITE_BACKEND_URL}/habit/${habitId}`,
       {
         method: "DELETE",
         headers: {
