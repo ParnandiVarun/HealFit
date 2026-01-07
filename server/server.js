@@ -19,34 +19,51 @@ const app = express();
 // ✅ Middlewares
 app.use(express.json());
 
-// ✅ Updated CORS Configuration (important for production)
+// =====================
+// ✅ FIXED CORS SETUP
+// =====================
 const allowedOrigins = [
-  "http://localhost:5173", // For local frontend
-  process.env.FRONTEND_URL, // For deployed frontend (Vercel)
+  "http://localhost:5173",
+  process.env.FRONTEND_URL, // https://heal-fit-ys7g.vercel.app
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like Postman or curl)
+      // Allow Postman, curl, mobile apps
       if (!origin) return callback(null, true);
+
+      // Allow exact known origins
       if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+        return callback(null, true);
       }
+
+      // ✅ Allow ALL Vercel preview deployments
+      if (origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+
+      // ❌ DO NOT throw error — just deny
+      return callback(null, false);
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// ✅ Static file serving (if you store uploads)
+// ✅ REQUIRED: handle preflight requests
+app.options(/.*/, cors());
+
+// =====================
+
+// ✅ Static file serving (uploads)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// ✅ Connect MongoDB before starting server
+// ✅ Connect MongoDB
 connectDB();
 
-// ✅ Initialize background scheduler (for cron-like jobs)
+// ✅ Initialize scheduler
 scheduler.init();
 
 // ✅ Routes
@@ -58,12 +75,12 @@ app.use("/habitLog", habitlog);
 app.use("/users", authroutes);
 app.use("/habit", Habitroutes);
 
-// ✅ Default route (for testing)
+// ✅ Health check
 app.get("/", (req, res) => {
   res.send("✅ HealFit Backend is running successfully!");
 });
 
-// ✅ PORT setup
+// ✅ PORT
 const PORT = process.env.PORT || 4000;
 
 // ✅ Start server
