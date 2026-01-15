@@ -24,7 +24,7 @@ app.use(express.json());
 // =====================
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.FRONTEND_URL, // https://heal-fit-ys7g.vercel.app
+  process.env.CLIENT_URL, // https://heal-fit-ys7g.vercel.app
 ];
 
 app.use(
