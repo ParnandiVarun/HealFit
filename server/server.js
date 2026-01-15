@@ -19,12 +19,10 @@ const app = express();
 // ✅ Middlewares
 app.use(express.json());
 
-// =====================
-// ✅ FIXED CORS SETUP
-// =====================
+
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.CLIENT_URL, // https://heal-fit-ys7g.vercel.app
+  process.env.CLIENT_URL, 
 ];
 
 app.use(
@@ -43,7 +41,7 @@ app.use(
         return callback(null, true);
       }
 
-      // ❌ DO NOT throw error — just deny
+      //  DO NOT throw error — just deny
       return callback(null, false);
     },
     credentials: true,
@@ -52,21 +50,20 @@ app.use(
   })
 );
 
-// ✅ REQUIRED: handle preflight requests
+// REQUIRED: handle preflight requests
 app.options(/.*/, cors());
 
 // =====================
 
-// ✅ Static file serving (uploads)
+//Static file serving (uploads)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// ✅ Connect MongoDB
+// Connect MongoDB
 connectDB();
 
-// ✅ Initialize scheduler
+
 scheduler.init();
 
-// ✅ Routes
 app.use("/soulfuel", soulroutes);
 app.use("/notifications", notificationroutes);
 app.use("/analytics", analytics);
@@ -75,15 +72,15 @@ app.use("/habitLog", habitlog);
 app.use("/users", authroutes);
 app.use("/habit", Habitroutes);
 
-// ✅ Health check
+
 app.get("/", (req, res) => {
   res.send("✅ HealFit Backend is running successfully!");
 });
 
-// ✅ PORT
+
 const PORT = process.env.PORT || 4000;
 
-// ✅ Start server
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
