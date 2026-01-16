@@ -19,31 +19,9 @@ const app = express();
 // ✅ Middlewares
 app.use(express.json());
 
-
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.CLIENT_URL, 
-];
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow Postman, curl, mobile apps
-      if (!origin) return callback(null, true);
-
-      // Allow exact known origins
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      // ✅ Allow ALL Vercel preview deployments
-      if (origin.endsWith(".vercel.app")) {
-        return callback(null, true);
-      }
-
-      //  DO NOT throw error — just deny
-      return callback(null, false);
-    },
+    origin: ["http://localhost:5173", process.env.CLIENT_URL],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -61,7 +39,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Connect MongoDB
 connectDB();
 
-
 scheduler.init();
 
 app.use("/soulfuel", soulroutes);
@@ -72,14 +49,11 @@ app.use("/habitLog", habitlog);
 app.use("/users", authroutes);
 app.use("/habit", Habitroutes);
 
-
 app.get("/", (req, res) => {
   res.send("✅ HealFit Backend is running successfully!");
 });
 
-
 const PORT = process.env.PORT || 4000;
-
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
