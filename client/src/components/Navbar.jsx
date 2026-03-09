@@ -57,7 +57,7 @@ export default function Navbar() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (!res.ok) {
@@ -79,7 +79,7 @@ export default function Navbar() {
           if (!imageUrl.startsWith("http")) {
             imageUrl = `${import.meta.env.VITE_BACKEND_URL}/${imageUrl.replace(
               /^\//,
-              ""
+              "",
             )}`;
           }
         }

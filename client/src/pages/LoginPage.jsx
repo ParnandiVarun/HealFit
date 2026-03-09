@@ -6,50 +6,66 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
 
   const change = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  /* ============================
+     LOGIN HANDLER (FIXED)
+  ============================ */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    console.log("BACKEND URL =", import.meta.env.VITE_BACKEND_URL);
+
+    if (!import.meta.env.VITE_BACKEND_URL) {
+      toast.error("Backend URL not configured");
+      return;
+    }
 
     if (!form.email || !form.password) {
       toast.warn("Please enter both email and password");
-      setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/users/login`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: form.email, password: form.password }),
-        }
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        },
       );
 
       const data = await response.json();
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", data.user.name);
-      localStorage.setItem("id", data.user.id);
-      localStorage.setItem("email", data.user.email);
       if (!response.ok) {
         toast.error(data.message || "Invalid email or password");
-      } else {
-        toast.success("Login successful!");
-        console.log("Login successful:", data);
-        setTimeout(() => navigate("/dashboard"), 1500);
+        return;
       }
+
+      if (!data.token || !data.user) {
+        toast.error("Invalid login response from server");
+        return;
+      }
+
+      // ✅ Store only after success
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("username", data.user.name);
+      localStorage.setItem("email", data.user.email);
+      localStorage.setItem("id", data.user.id);
+
+      toast.success("Login successful!");
+      setTimeout(() => navigate("/dashboard"), 1200);
     } catch (err) {
       console.error(err);
       toast.error("Server error. Please try again later.");
@@ -58,37 +74,44 @@ export default function LoginPage() {
     }
   };
 
+  /* ============================
+     FORGOT PASSWORD
+  ============================ */
   const handleForgotPassword = async (e) => {
     e.preventDefault();
-    setForgotLoading(true);
 
-    if (!forgotEmail) {
-      toast.warn("Please enter your email address");
-      setForgotLoading(false);
+    if (!import.meta.env.VITE_BACKEND_URL) {
+      toast.error("Backend URL not configured");
       return;
     }
+
+    if (!forgotEmail) {
+      toast.warn("Please enter your email");
+      return;
+    }
+
+    setForgotLoading(true);
 
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/users/forgot-password`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: forgotEmail }),
-        }
+        },
       );
 
       const data = await response.json();
-      localStorage.setItem("rawtoken", data.rawtoken);
+
       if (!response.ok) {
         toast.error(data.message || "Failed to send reset email");
-      } else {
-        toast.success("Password reset email sent! Check your inbox.");
-        setShowForgotPassword(false);
-        setForgotEmail("");
+        return;
       }
+
+      toast.success("Password reset email sent!");
+      setShowForgotPassword(false);
+      setForgotEmail("");
     } catch (err) {
       console.error(err);
       toast.error("Server error. Please try again later.");
@@ -169,8 +192,11 @@ export default function LoginPage() {
                 transition={{ delay: 0.3 }}
                 className="mt-8 text-white max-w-xs"
               >
-                <h3 className="text-3xl font-semibold">Welcome back!</h3>
-                <p className="mt-3 text-sm opacity-90">
+                <h3 className="text-xl font-semibold text-emerald-600">
+                  Welcome back!
+                </h3>
+
+                <p className="mt-2 text-sm text-emerald-700/80">
                   Sign in to continue your journey. Smooth animations and
                   delightful micro-interactions make everything feel alive.
                 </p>
@@ -381,7 +407,7 @@ export default function LoginPage() {
       </div>
 
       {/* Styles for subtle animations */}
-      <style jsx>{`
+      <style>{`
         .animate-blob {
           animation: blob 8s infinite;
         }

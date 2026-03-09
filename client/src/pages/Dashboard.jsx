@@ -18,7 +18,7 @@ const MobileHeader = ({ toggleSidebar, navigate, userData, onGoToLanding }) => {
           className="flex items-center"
         >
           <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#38B69A] to-[#2E8B75] flex items-center justify-center text-white font-bold shadow-lg">
-            W
+            H
           </div>
         </button>
       </div>
@@ -26,7 +26,7 @@ const MobileHeader = ({ toggleSidebar, navigate, userData, onGoToLanding }) => {
       <div className="flex items-center space-x-3">
         <button
           onClick={onGoToLanding}
-          className="text-sm text-[#38B69A] font-semibold hover:text-purple-500 transition-colors bg-gray-100 px-3 py-1 rounded-lg shadow-sm"
+          className="text-sm text-[#38B69A] font-semibold hover:text-[#2E8B75] transition-colors bg-gray-100 px-3 py-1 rounded-lg shadow-sm"
         >
           Home
         </button>
@@ -60,8 +60,8 @@ const MobileBottomNav = ({ activeSection, setActiveSection, navigate }) => {
             }}
             className={`flex flex-col items-center p-2 rounded-xl transition-all duration-200 flex-1 mx-1 ${
               activeSection === item.id
-                ? "text-[#38B69A] bg-gray-50 shadow-inner"
-                : "text-gray-500 hover:text-[#2E8B75]"
+                ? "text-[#2E8B75] bg-gray-50 shadow-inner"
+                : "text-gray-500 hover:text-[#38B69A]"
             }`}
           >
             <i className={`fas ${item.icon} text-lg mb-1`}></i>
@@ -74,151 +74,151 @@ const MobileBottomNav = ({ activeSection, setActiveSection, navigate }) => {
 };
 
 // Enhanced components for each section
-const Overview = ({ userData, toggleHabit }) => {
+const quotes = [
+  "Small steps every day lead to big changes 🌱",
+  "Your future self will thank you for today 💪",
+  "Consistency beats motivation 🔥",
+  "One habit can change your life ✨",
+];
+
+const dashboardQuotes = [
+  {
+    title: "Daily Reminder 🌱",
+    text: "Small habits practiced daily lead to massive transformation.",
+  },
+  {
+    title: "Mindset 💭",
+    text: "You don’t need motivation. You need consistency.",
+  },
+  {
+    title: "Wellness 🧘",
+    text: "Taking care of yourself is productive.",
+  },
+  {
+    title: "Growth 🚀",
+    text: "Progress, not perfection. Every single day.",
+  },
+];
+
+const Overview = ({ userData }) => {
+  const [quoteIndex, setQuoteIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setQuoteIndex((prev) => (prev + 1) % quotes.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const hasHabits = userData.habits.length > 0;
+  const hasGoals = userData.goals.length > 0;
+
+  /* EMPTY DASHBOARD STATE */
+  if (!hasHabits && !hasGoals) {
+    return (
+      <div className="space-y-8 animate-fadeIn">
+        {/* HERO MOTIVATION BANNER */}
+        <div className="relative overflow-hidden bg-gradient-to-r from-[#38B69A] to-[#2E8B75] rounded-3xl p-8 text-white shadow-2xl">
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full animate-pulse"></div>
+          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full animate-pulse"></div>
+
+          <h2 className="text-3xl md:text-4xl font-bold">
+            Welcome back, {userData.name} 👋
+          </h2>
+          <p className="mt-2 text-white/90 max-w-xl">
+            You are building something powerful — one habit, one goal, one day
+            at a time.
+          </p>
+        </div>
+
+        {/* STATS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white p-6 rounded-2xl shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <h3 className="text-gray-500 font-semibold">Habits</h3>
+            <p className="text-4xl font-bold text-[#38B69A] mt-2">
+              {userData.habits.length}
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <h3 className="text-gray-500 font-semibold">Goals</h3>
+            <p className="text-4xl font-bold text-[#38B69A] mt-2">
+              {userData.goals.length}
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <h3 className="text-gray-500 font-semibold">Focus</h3>
+            <p className="mt-3 text-sm text-gray-600">
+              Discipline today creates freedom tomorrow.
+            </p>
+          </div>
+        </div>
+
+        {/* QUOTE GRID */}
+        <div>
+          <h3 className="text-xl font-bold text-gray-800 mb-4">
+            Daily Inspiration ✨
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {dashboardQuotes.map((quote, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group"
+              >
+                <div className="w-10 h-10 rounded-full bg-[#38B69A]/10 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                  <i className="fas fa-quote-left text-[#38B69A]"></i>
+                </div>
+                <h4 className="font-semibold text-gray-800 mb-2">
+                  {quote.title}
+                </h4>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {quote.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* DASHBOARD WHEN DATA EXISTS */
   return (
-    <div className="space-y-4 md:space-y-6 animate-fadeIn pb-20 md:pb-0">
+    <div className="space-y-6 animate-fadeIn">
       <div>
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 bg-gradient-to-r from-[#38B69A] to-[#2E8B75] bg-clip-text text-transparent">
-          Welcome back, {userData.name}!
+        <h2 className="text-3xl font-bold text-gray-800">
+          Welcome back, {userData.name} 👋
         </h2>
-        <p className="text-gray-600 mt-1 md:mt-2 text-sm md:text-base">
-          Ready to continue your wellness journey today?
+        <p className="text-gray-600 mt-1">
+          Keep going — consistency builds results.
         </p>
       </div>
-      <div className="flex items-center mt-3 md:mt-0">
-        <div className="w-2 h-2 md:w-3 md:h-3 bg-green-400 rounded-full animate-pulse mr-2"></div>
-        <span className="text-xs md:text-sm text-gray-600">
-          Current streak: {userData.streak} days 🔥
-        </span>
-      </div>
 
-      {/* Enhanced Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mt-4 md:mt-6">
-        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-700 text-xs md:text-sm">
-              STREAK
-            </h3>
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-[#38B69A]  rounded-full flex items-center justify-center shadow-lg">
-              <i className="fas fa-fire text-white text-sm"></i>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {hasHabits && (
+          <div className="bg-white p-6 rounded-2xl shadow-xl hover:scale-[1.02] transition">
+            <h3 className="text-gray-600 font-semibold">Habits</h3>
+            <p className="text-4xl font-bold text-[#38B69A] mt-2">
+              {userData.habits.length}
+            </p>
           </div>
-          <p className="text-2xl md:text-4xl font-bold mt-3 text-[#38B69A]">
-            {userData.streak}
-          </p>
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-3 shadow-inner">
-            <div
-              className="bg-[#38B69A] h-2 rounded-full transition-all duration-1000 shadow-lg"
-              style={{
-                width: `${Math.min((userData.streak / 30) * 100, 100)}%`,
-              }}
-            ></div>
-          </div>
-        </div>
+        )}
 
-        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-700 text-xs md:text-sm">
-              HABITS
-            </h3>
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-[#38B69A]  rounded-full flex items-center justify-center shadow-lg">
-              <i className="fas fa-list-check text-white text-sm"></i>
-            </div>
+        {hasGoals && (
+          <div className="bg-white p-6 rounded-2xl shadow-xl hover:scale-[1.02] transition">
+            <h3 className="text-gray-600 font-semibold">Goals</h3>
+            <p className="text-4xl font-bold text-[#38B69A] mt-2">
+              {userData.goals.length}
+            </p>
           </div>
-          <p className="text-2xl md:text-4xl font-bold mt-3 text-[#38B69A]">
-            {userData.habits.length}
-          </p>
-          <p className="text-xs md:text-sm text-gray-500 mt-2">
-            {userData.habits.filter((h) => h.completed).length} completed today
-          </p>
-        </div>
+        )}
 
-        <div className="col-span-2 md:col-span-1 bg-white p-4 md:p-6 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-700 text-xs md:text-sm">
-              GOALS
-            </h3>
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-[#38B69A] rounded-full flex items-center justify-center shadow-lg">
-              <i className="fas fa-bullseye text-white text-sm"></i>
-            </div>
-          </div>
-          <p className="text-2xl md:text-4xl font-bold mt-3 text-[#38B69A]">
-            {userData.goals.length}
-          </p>
-          <p className="text-xs md:text-sm text-gray-500 mt-2">
-            Avg:{" "}
-            {Math.round(
-              userData.goals.reduce((acc, goal) => acc + goal.progress, 0) /
-                userData.goals.length
-            )}
-            %
-          </p>
+        <div className="bg-gradient-to-r from-[#38B69A] to-[#2E8B75] p-6 rounded-2xl shadow-xl text-white animate-pulse">
+          <h3 className="font-semibold">Motivation</h3>
+          <p className="mt-3">{quotes[quoteIndex]}</p>
         </div>
-      </div>
-
-      {/* Enhanced Today's Habits */}
-      <div className="bg-white p-4 md:p-6 rounded-2xl shadow-2xl mt-4 md:mt-6">
-        <div className="flex items-center justify-between mb-4 md:mb-6">
-          <h3 className="text-lg md:text-2xl font-bold text-gray-800">
-            Today's Habits
-          </h3>
-          <div className="text-xs md:text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full shadow-inner">
-            {userData.habits.filter((h) => h.completed).length}/
-            {userData.habits.length}
-          </div>
-        </div>
-        <div className="space-y-3">
-          {userData.habits.map((habit, index) => (
-            <div
-              key={habit.id}
-              className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-gray-50 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <div className="flex items-center flex-1 min-w-0">
-                <button
-                  onClick={() => toggleHabit(habit.id)}
-                  className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center mr-3 md:mr-4 transition-all duration-300 flex-shrink-0 shadow-lg ${
-                    habit.completed
-                      ? "bg-[#38B69A]  text-white"
-                      : "bg-white text-gray-400 hover:bg-[#38B69A] hover:text-white"
-                  }`}
-                >
-                  {habit.completed && (
-                    <i className="fas fa-check text-xs md:text-sm"></i>
-                  )}
-                </button>
-                <div className="min-w-0 flex-1">
-                  <span
-                    className={`text-sm md:text-lg font-medium truncate ${
-                      habit.completed
-                        ? "line-through text-gray-400"
-                        : "text-gray-700"
-                    }`}
-                  >
-                    {habit.name}
-                  </span>
-                  <p className="text-xs md:text-sm text-gray-500 truncate">
-                    {habit.frequency}
-                  </p>
-                </div>
-              </div>
-              {habit.completed && (
-                <div className="text-green-500 animate-bounce ml-2 flex-shrink-0">
-                  <i className="fas fa-check-circle text-sm md:text-base"></i>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Quick Actions for Mobile */}
-      <div className="md:hidden grid grid-cols-2 gap-3 mt-6">
-        <button className="bg-[#38B69A] text-white p-3 rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
-          <i className="fas fa-plus mr-2"></i>Add Habit
-        </button>
-        <button className="bg-white text-[#38B69A] p-3 rounded-xl text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
-          <i className="fas fa-bullseye mr-2"></i>Set Goal
-        </button>
       </div>
     </div>
   );
@@ -237,7 +237,7 @@ const HabitsPage = ({ userData, toggleHabit }) => {
   return (
     <div className="animate-fadeIn pb-20 md:pb-0">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 bg-gradient-to-r from-[#38B69A]  to-[#2E8B75] bg-clip-text text-transparent">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 bg-gradient-to-r from-[#38B69A] to-[#2E8B75]-500 bg-clip-text text-transparent">
           Your Habits
         </h2>
         <div className="flex mt-4 md:mt-0 w-full md:w-auto">
@@ -250,7 +250,7 @@ const HabitsPage = ({ userData, toggleHabit }) => {
           />
           <button
             onClick={addHabit}
-            className="bg-[#38B69A] text-white px-4 md:px-6 rounded-r-xl hover:bg-[#2E8B75] transition-colors shadow-lg hover:shadow-xl"
+            className="bg-[#38B69A] text-white px-4 md:px-6 rounded-r-xl hover:bg-[#2a8c75] transition-colors shadow-lg hover:shadow-xl"
           >
             <i className="fas fa-plus"></i>
           </button>
@@ -291,7 +291,7 @@ const HabitsPage = ({ userData, toggleHabit }) => {
               >
                 {habit.completed ? "Completed" : "Pending"}
               </span>
-              <button className="text-[#38B69A] hover:text-[#2E8B75] transition-colors">
+              <button className="text-[#38B69A] hover:text-[#2a8c75] transition-colors">
                 <i className="fas fa-ellipsis-h"></i>
               </button>
             </div>
@@ -319,10 +319,10 @@ const GoalsPage = ({ userData }) => {
   return (
     <div className="animate-fadeIn pb-20 md:pb-0">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 bg-gradient-to-r from-[#e0b6f5] to-purple-500 bg-clip-text text-transparent">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 bg-gradient-to-r from-[#38B69A] to-[#2E8B75] bg-clip-text text-transparent">
           Your Goals
         </h2>
-        <button className="bg-[#38B69A] text-white px-4 py-3 md:px-6 md:py-3 rounded-xl hover:bg-[#2E8B75] transition-colors mt-4 md:mt-0 text-sm md:text-base shadow-lg hover:shadow-xl w-full md:w-auto">
+        <button className="bg-[#38B69A] text-white px-4 py-3 md:px-6 md:py-3 rounded-xl hover:bg-[#2a8c75] transition-colors mt-4 md:mt-0 text-sm md:text-base shadow-lg hover:shadow-xl w-full md:w-auto">
           <i className="fas fa-plus mr-2"></i>
           Set New Goal
         </button>
@@ -361,7 +361,7 @@ const GoalsPage = ({ userData }) => {
             </div>
 
             <div className="flex justify-between mt-3 md:mt-4">
-              <button className="text-[#38B69A] hover:text-[#2E8B75] transition-colors text-sm">
+              <button className="text-[#38B69A] hover:text-[#2a8c75] transition-colors text-sm">
                 <i className="fas fa-edit mr-1"></i>Edit
               </button>
               <button className="text-green-500 hover:text-green-600 transition-colors text-sm">
@@ -464,7 +464,7 @@ const Sidebar = ({
                 }}
                 className={`w-full flex items-center p-3 md:p-4 rounded-xl transition-all duration-300 group shadow-sm hover:shadow-md ${
                   activeSection === item.id
-                    ? "bg-gradient-to-r from-[#38B69A] to-[#2E8B75] text-white shadow-lg"
+                    ? "bg-gradient-to-r from-[#38B69A] to-[#2E8B75] hover:bg-gradient-to-r from-[#38B69A] to-[#2E8B75] text-white shadow-lg"
                     : "text-gray-700 hover:bg-gray-50 hover:text-[#38B69A]"
                 }`}
               >
@@ -506,7 +506,7 @@ const Sidebar = ({
         </button>
         <button
           onClick={generatePDF}
-          className="w-full flex items-center p-3 md:p-4 rounded-xl text-gray-700 hover:bg-gray-50 hover:text-[#2E8B75] transition-all duration-300 group shadow-sm hover:shadow-md"
+          className="w-full flex items-center p-3 md:p-4 rounded-xl text-gray-700 hover:bg-gray-50 hover:text-[#38B69A] transition-all duration-300 group shadow-sm hover:shadow-md"
         >
           <i
             className={`fas fa-file-pdf text-base md:text-lg ${

@@ -49,7 +49,7 @@ export default function SignupPage() {
             password: form.password,
             name: form.name,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -85,7 +85,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-[#f7f0ff]">
+    <div className="min-h-screen m-5 flex items-center justify-center bg-gradient-to-br from-white to-[#f7f0ff]">
       <div className="relative w-full max-w-5xl mx-6 lg:mx-12">
         {/* Card */}
         <div className="relative grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl">
@@ -138,10 +138,11 @@ export default function SignupPage() {
                 transition={{ delay: 0.3 }}
                 className="mt-8 text-white max-w-xs"
               >
-                <h3 className="text-3xl font-semibold">
+                <h3 className="text-3xl font-semibold text-emerald-600">
                   Join the creative community
                 </h3>
-                <p className="mt-3 text-sm opacity-90">
+
+                <p className="mt-3 text-sm text-emerald-700/80">
                   Sign up to collaborate, share your work, and get inspired.
                   Smooth animations and delightful micro-interactions make
                   everything feel alive.
@@ -323,7 +324,7 @@ export default function SignupPage() {
       </div>
 
       {/* Styles for subtle animations */}
-      <style jsx>{`
+      <style>{`
         .animate-blob {
           animation: blob 8s infinite;
         }
